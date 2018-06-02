@@ -2,11 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 import AddForm from './components/AddForm';
+import ClientsTable from './components/ClientsTable'
 
 const App = () => (
   <Container>
     <Title>Клиенты</Title>
     <AddForm />
+    <ClientsTable />
   </Container>
 );
 

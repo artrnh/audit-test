@@ -10,6 +10,7 @@ import configureStore from './store/configureStore';
 injectGlobal`
   html, body {
     font-family: 'Roboto';
+    background-color: #f7f7f7;
   }
 `;
 
