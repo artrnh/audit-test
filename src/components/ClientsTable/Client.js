@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import FontAwesomeIcon from '../UI/FontAwesomeIcon';
 import { removeClient, activateEditing } from '../../store/actions/clients';
@@ -24,6 +25,15 @@ const Client = props => (
     <Td>------</Td>
   </tr>
 );
+
+Client.propTypes = {
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  tel: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  removeClient: PropTypes.func.isRequired,
+  activateEditing: PropTypes.func.isRequired,
+};
 
 const Td = styled.td`
   width: 125px;

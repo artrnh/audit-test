@@ -19,3 +19,7 @@ export const editClient = newClientData => ({
   type: actionTypes.EDIT_CLIENT,
   payload: { newClientData },
 });
+
+export const toggleForm = () => ({
+  type: actionTypes.TOGGLE_ADD_FORM,
+});

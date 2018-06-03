@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Input = props => (
   <Label>
@@ -10,8 +11,11 @@ const Input = props => (
 
 Input.defaultProps = {
   label: '',
-  type: 'text',
-  placeholder: '',
+};
+
+Input.propTypes = {
+  label: PropTypes.string,
+  input: PropTypes.object.isRequired,
 };
 
 const Label = styled.label`

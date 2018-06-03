@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   clientsList: [],
   editingClientId: null,
+  formOpened: false,
 };
 
 export default (state = initialState, action) => {
@@ -25,11 +26,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         editingClientId: payload.id,
+        formOpened: true,
       };
 
     case actionTypes.EDIT_CLIENT:
       const clientIndex = state.clientsList.findIndex(client => client.id === state.editingClientId);
-      console.log(clientIndex, state.clientsList.slice(0, clientIndex), state.clientsList.slice(clientIndex + 1));
+
       return {
         ...state,
         editingClientId: null,
@@ -39,6 +41,12 @@ export default (state = initialState, action) => {
           ...state.clientsList.slice(clientIndex + 1),
         ],
       };
+
+    case actionTypes.TOGGLE_ADD_FORM:
+      return {
+        ...state,
+        formOpened: !state.formOpened,
+      }
 
     default:
       return state;

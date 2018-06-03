@@ -1,5 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default props => (
-  <i className={`fas fa-${props.name}`} style={{ fontSize: '16px' }}></i>
+const FontAwesomeIcon =  props => (
+  <i className={`fas fa-${props.name}`} style={{ fontSize: '18px' }} {...props}></i>
 );
+
+FontAwesomeIcon.propTypes = {
+  name: PropTypes.string.isRequired,
+};
+
+export default FontAwesomeIcon;

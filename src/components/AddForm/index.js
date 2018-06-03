@@ -3,36 +3,56 @@ import { reduxForm, Field } from 'redux-form';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import Input from '../UI/Input';
-import { addClient, editClient } from '../../store/actions/clients';
+import { addClient, editClient, toggleForm } from '../../store/actions/clients';
+import FontAwesomeIcon from '../UI/FontAwesomeIcon';
 
 class AddForm extends Component {
-  componentDidUpdate() {
-    if (this.props.editingClientId) {
-      const editingClient = this.props.clients.find(client => client.id === this.props.editingClientId);
+  static propTypes = {
+    change: PropTypes.func.isRequired,
+    addClient: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    toggleForm: PropTypes.func.isRequired,
+    editingClientId: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+    opened: PropTypes.bool.isRequired,
+    clients: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      tel: PropTypes.string,
+      email: PropTypes.string,
+    })).isRequired,
+  };
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.editingClientId && nextProps.editingClientId !== this.props.editingClientId) {
+      const editingClient = this.props.clients.find(client => client.id === nextProps.editingClientId);
       Object.keys(editingClient).forEach(key => {
         this.props.change(key, editingClient[key]);
       });
     }
+
+    return true;
   }
 
   addClient = (values) => {
-    console.log('values', values);
-    this.props.addClient({ id: _.uniqueId(), ...values, });
+    this.props.addClient({ id: Number(_.uniqueId()), ...values, });
     this.props.reset();
+    this.props.toggleForm();
   };
 
   editClient = (values) => {
-    console.log('values', values);
     this.props.editClient(values);
     this.props.reset();
+    this.props.toggleForm();
   };
 
   render() {
-    const submitHandler = this.props.editingClientId ? this.editClient : this.addClient;
+    const { editingClientId, toggleForm, opened } = this.props;
+    const submitHandler = editingClientId ? this.editClient : this.addClient;
 
-    return (
+    const form = (
       <Form onSubmit={this.props.handleSubmit(submitHandler)}>
         <Field
           name="name"
@@ -58,7 +78,25 @@ class AddForm extends Component {
           required
         />
         <SubmitButton type="submit">Сохранить</SubmitButton>
+        <ToggleButtons>
+          <ToggleBtn type="button" onClick={toggleForm}>
+            <FontAwesomeIcon name="angle-up" style={{ fontSize: '30px' }} />
+          </ToggleBtn>
+          <ToggleBtn type="button" onClick={toggleForm}>
+            <FontAwesomeIcon name="angle-up" style={{ fontSize: '30px' }} />
+          </ToggleBtn>
+        </ToggleButtons>
       </Form>
+    );
+
+    return (
+      <div>
+        <AddButton onClick={toggleForm}>
+          <FontAwesomeIcon name="plus-circle" />
+          <AddButtonText>Добавить клиента</AddButtonText>
+        </AddButton>
+        {opened && form}
+      </div>
     );
   }
 }
@@ -67,7 +105,8 @@ const Form = styled.form`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #dfdfdf;
 `;
 
 const SubmitButton = styled.button`
@@ -86,13 +125,47 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
+const AddButton = styled.button`
+  display: flex;
+  margin-bottom: 20px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+`;
+
+const AddButtonText = styled.p`
+  font-family: 'Roboto';
+  margin: 0;
+  margin-left: 8px;
+  font-size: 16px;
+  color: #302e30;
+  font-weight: 700;
+`;
+
+const ToggleButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-basis: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+`;
+
+const ToggleBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+`;
+
 const mapStateToProps = state => ({
   editingClientId: state.clients.editingClientId,
   clients: state.clients.clientsList,
+  opened: state.clients.formOpened,
 });
 
 const DecoratedAddForm = reduxForm({
   form: 'addForm',
 })(AddForm);
 
-export default connect(mapStateToProps, { addClient, editClient })(DecoratedAddForm);
+export default connect(mapStateToProps, { addClient, editClient, toggleForm })(DecoratedAddForm);

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Client from './Client';
 
@@ -36,6 +37,15 @@ const ClientsTable = props => {
       </tbody>
     </Table>
   );
+};
+
+ClientsTable.propTypes = {
+  clients: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    tel: PropTypes.string,
+    email: PropTypes.string,
+  })).isRequired,
 };
 
 const Table = styled.table`
