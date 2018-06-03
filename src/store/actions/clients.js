@@ -11,6 +11,11 @@ export const removeClient = id => ({
 });
 
 export const activateEditing = id => ({
-  type: actionTypes.EDITING_MODE,
+  type: actionTypes.ACTIVATE_EDITING,
   payload: { id },
+});
+
+export const editClient = newClientData => ({
+  type: actionTypes.EDIT_CLIENT,
+  payload: { newClientData },
 });

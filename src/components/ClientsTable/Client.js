@@ -18,10 +18,10 @@ const Client = props => (
     <Td>{props.name}</Td>
     <Td>{props.tel}</Td>
     <Td>{props.email}</Td>
-    <Td>{props.lastVisit}</Td>
-    <Td>{props.paymentSum}</Td>
-    <Td>{props.visitCount}</Td>
-    <Td>{props.activeTicket}</Td>
+    <Td>------</Td>
+    <Td>------</Td>
+    <Td>------</Td>
+    <Td>------</Td>
   </tr>
 );
 

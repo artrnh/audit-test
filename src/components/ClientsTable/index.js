@@ -31,10 +31,6 @@ const ClientsTable = props => {
             name={client.name}
             tel={client.tel}
             email={client.email}
-            lastVisit={client.lastVisit}
-            paymentSum={client.paymentSum}
-            visitCount={client.visitCount}
-            activeTicket={client.activeTicket}
           />
         ))}
       </tbody>
@@ -63,7 +59,7 @@ const NoData = styled.h3`
 `;
 
 const mapStateToProps = state => ({
-  clients: state.clients.items,
+  clients: state.clients.clientsList,
 });
 
 export default connect(mapStateToProps)(ClientsTable);

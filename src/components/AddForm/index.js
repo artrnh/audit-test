@@ -1,33 +1,66 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Input from '../UI/Input';
-import { addClient } from '../../store/actions/clients';
+import { addClient, editClient } from '../../store/actions/clients';
 
-const AddForm = (props) => {
-  const addClient = (values) => {
-    props.addClient({
-      id: _.uniqueId(),
-      ...values,
-      lastVisit: '------',
-      paymentSum: '------',
-      visitCount: '------',
-      activeTicket: '------',
-    });
-    props.reset();
+class AddForm extends Component {
+  componentDidUpdate() {
+    if (this.props.editingClientId) {
+      const editingClient = this.props.clients.find(client => client.id === this.props.editingClientId);
+      Object.keys(editingClient).forEach(key => {
+        this.props.change(key, editingClient[key]);
+      });
+    }
+  }
+
+  addClient = (values) => {
+    console.log('values', values);
+    this.props.addClient({ id: _.uniqueId(), ...values, });
+    this.props.reset();
   };
 
-  return (
-    <Form onSubmit={props.handleSubmit(addClient)}>
-      <Field name="name" component={Input} type="text" label="Имя" placeholder="Иванов Иван Иванович" required />
-      <Field name="tel" component={Input} type="tel" label="Телефон" required />
-      <Field name="email" component={Input} type="email" label="E-mail" placeholder="name@address.ru" required />
-      <SubmitButton type="submit">Сохранить</SubmitButton>
-    </Form>
-  );
+  editClient = (values) => {
+    console.log('values', values);
+    this.props.editClient(values);
+    this.props.reset();
+  };
+
+  render() {
+    const submitHandler = this.props.editingClientId ? this.editClient : this.addClient;
+
+    return (
+      <Form onSubmit={this.props.handleSubmit(submitHandler)}>
+        <Field
+          name="name"
+          component={Input}
+          type="text"
+          label="Имя"
+          placeholder="Иванов Иван Иванович"
+          required
+        />
+        <Field
+          name="tel"
+          component={Input}
+          type="tel"
+          label="Телефон"
+          required
+        />
+        <Field
+          name="email"
+          component={Input}
+          type="email"
+          label="E-mail"
+          placeholder="name@address.ru"
+          required
+        />
+        <SubmitButton type="submit">Сохранить</SubmitButton>
+      </Form>
+    );
+  }
 }
 
 const Form = styled.form`
@@ -54,9 +87,12 @@ const SubmitButton = styled.button`
 `;
 
 const mapStateToProps = state => ({
-  editing: state.clients.editing,
+  editingClientId: state.clients.editingClientId,
+  clients: state.clients.clientsList,
 });
 
-export default connect(mapStateToProps, { addClient })(reduxForm({
+const DecoratedAddForm = reduxForm({
   form: 'addForm',
-})(AddForm));
+})(AddForm);
+
+export default connect(mapStateToProps, { addClient, editClient })(DecoratedAddForm);
