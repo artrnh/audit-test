@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Client from './Client';
+import Client from '../Client';
 
 const ClientsTable = props => {
   if (!props.clients.length) return (

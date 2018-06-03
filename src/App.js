@@ -6,7 +6,7 @@ import ClientsTable from './components/ClientsTable'
 
 const App = () => (
   <Container>
-    <Title>Клиенты</Title>
+    <h1>Клиенты</h1>
     <AddForm />
     <ClientsTable />
   </Container>
@@ -15,10 +15,6 @@ const App = () => (
 const Container = styled.div`
   width: 1000px;
   margin: 0 auto;
-`;
-
-const Title = styled.h1`
-
 `;
 
 export default App;

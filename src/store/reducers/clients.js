@@ -46,9 +46,9 @@ export default (state = initialState, action) => {
       return {
         ...state,
         formOpened: !state.formOpened,
-      }
+      };
 
     default:
       return state;
   }
-}
+};
